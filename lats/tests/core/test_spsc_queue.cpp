@@ -60,7 +60,8 @@ TEST(SPSCQueueTest, FIFOOrder) {
 // 測試 Move Semantics
 TEST(SPSCQueueTest, MoveSemantics) {
   struct NonCopyable {
-    int value;
+    int value = 0;
+    NonCopyable() = default;
     NonCopyable(int v) : value(v) {}
     NonCopyable(const NonCopyable &) = delete;
     NonCopyable &operator=(const NonCopyable &) = delete;

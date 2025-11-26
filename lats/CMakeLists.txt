@@ -35,4 +35,4 @@ add_subdirectory(src/core)
 add_subdirectory(tests)
 
 # Becnmark
-# add_subdirectory(bench)
+add_subdirectory(bench)

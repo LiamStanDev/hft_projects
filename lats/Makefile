@@ -1,4 +1,4 @@
-.PHONY: env-debug env-release build-debug build-release clean test
+.PHONY: env-debug env-release build-debug build-release clean test bench
 BUILD_DIR = build
 SOURCE_DIR = .
 TOOLCHAIN_FILE = conan_toolchain.cmake
@@ -39,3 +39,8 @@ clean:
 
 test: build
 	@cd $(BUILD_DIR) && ctest --output-on-failure
+
+bench: build-release
+	@echo "Running benchmarks"
+	@$(BUILD_DIR)/bench/run_bench --benchmark_format=console
+

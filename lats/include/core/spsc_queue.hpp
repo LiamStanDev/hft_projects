@@ -4,6 +4,7 @@
 #include <atomic>
 #include <cstddef>
 #include <optional>
+#include <type_traits>
 namespace lats::core {
 
 inline constexpr size_t CACHE_LINE_SIZE = 64;
@@ -12,6 +13,9 @@ template <typename T, size_t Capacity> class SPSCQueue {
   // 從二進制來看 2 的冪次只有一個位數為 1 若他減去 1 在與一定為 0
   static_assert((Capacity & (Capacity - 1)) == 0 && Capacity > 0,
                 "Capacity must be power of 2");
+
+  static_assert(std::is_default_constructible_v<T>,
+                "T must be DefaultConstructible for zero-overhead");
 
 public:
   SPSCQueue() : head_(0), tail_(0) {};
