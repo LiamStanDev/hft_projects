@@ -24,8 +24,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Dependencies
 find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
+find_package(Boost REQUIRED)
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include
+)
 
 # Submodules
 add_subdirectory(src/core)
@@ -36,3 +39,6 @@ add_subdirectory(tests)
 
 # Becnmark
 add_subdirectory(bench)
+
+# Example
+add_subdirectory(examples)
