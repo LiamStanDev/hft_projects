@@ -15,6 +15,8 @@ add_executable(run_bench
 
 target_link_libraries(run_bench
     PRIVATE
+    lats_core
     benchmark::benchmark
+    benchmark::benchmark_main # 提供 main 函數
     pthread
 )

@@ -41,6 +41,10 @@ test: build
 	@cd $(BUILD_DIR) && ctest --output-on-failure
 
 bench: build-release
-	@echo "Running benchmarks"
+	@echo "Running benchmarks..."
 	@$(BUILD_DIR)/bench/run_bench --benchmark_format=console
+
+bench-verbose: build-release
+	@echo "Running benchmarks with detailed output..."
+	@$(BUILD_DIR)/bench/run_bench --benchmark_format=console --benchmark_repetitions=3
 

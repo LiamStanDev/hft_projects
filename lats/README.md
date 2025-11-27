@@ -1,5 +1,75 @@
 # 🚀 HFT 低延遲事件驅動交易核心系統 (LATS) - C++17 標準
 
+## 📈 當前進度總覽
+
+**最後更新：** 2025-11-27
+
+| 階段 | 狀態 | 完成度 | 關鍵成果 |
+|------|------|--------|---------|
+| **階段一：數據採集與 I/O 隔離** | 🟡 進行中 | 80% | ✅ Lock-free Queue<br>✅ 性能測試 (15.6ns)<br>⚠️ UDP Multicast 待實現 |
+| **階段二：LOB/Matching Engine** | ⚪ 未開始 | 0% | - |
+| **階段三：策略與回測框架** | ⚪ 未開始 | 0% | - |
+| **階段四：Gateway/Distribution** | ⚪ 未開始 | 0% | - |
+
+### ✅ 已完成的核心組件
+
+#### **Lock-free SPSC Queue** (`include/core/spsc_queue.hpp`)
+- ✅ 單生產者單消費者無鎖隊列實現
+- ✅ Cache line padding 防止 false sharing
+- ✅ 使用 `std::atomic` 實現內存順序控制
+- ✅ 支持任意可移動類型 (move semantics)
+
+**性能指標：**
+- 單次 Push/Pop 延遲：**15.6 納秒**
+- 吞吐量：**1.39 億次操作/秒**
+- 測試環境：6 核 12 線程 CPU @ 2.5GHz
+
+**測試覆蓋：**
+- ✅ 基本功能測試（Push/Pop/Empty）
+- ✅ 邊界測試（隊列滿/空）
+- ✅ FIFO 順序驗證
+- ✅ Move Semantics 測試
+- ✅ 併發安全性測試（Producer-Consumer）
+- ✅ 壓力測試（100 萬次操作）
+
+#### **高精度計時器** (`include/core/timer.hpp`)
+- ✅ 基於 TSC (Time Stamp Counter) 的納秒級計時
+- ✅ 自動校準 TSC 頻率
+- ✅ 提供 RAII 風格的 `ScopedTimer`
+- ✅ Cycles 到納秒的轉換
+
+#### **延遲統計分析** (`include/core/latency_stats.hpp`)
+- ✅ 支持百分位數計算 (P50/P95/P99/P999)
+- ✅ 平均值、最小值、最大值統計
+- ✅ 基於排序的精確百分位數
+
+#### **性能基準測試框架** (`bench/bench_spsc_queue.cpp`)
+- ✅ Google Benchmark 集成
+- ✅ 單次操作延遲測試
+- ✅ Producer-Consumer 端到端延遲測試
+- ✅ 吞吐量測試
+- ✅ 不同消息大小的性能影響分析
+
+### 🚧 待完成的階段一任務
+
+- ⚠️ **UDP Multicast 數據接收器** - 實現 Linux Socket 接收市場數據
+- ⚠️ **I/O 線程隔離架構** - 使用 SPSC Queue 隔離網路 I/O
+- ⚠️ **日誌系統集成** - 使用 spdlog 記錄精確時間戳
+
+### 🎯 下一步計劃
+
+**選項 A：完成階段一**
+- 實現 UDP Multicast Receiver
+- 集成 SPSC Queue 進行 I/O 隔離
+- 完整的階段一驗收
+
+**選項 B：進入階段二（推薦）**
+- 實現 Limit Order Book (LOB) 引擎
+- 學習 Boost Intrusive 容器
+- 設計 Custom Memory Allocator
+
+---
+
 ## 🌟 項目說明與核心目標
 
 這個專案是一個以 **C++17** 為基礎，運行於 **Linux 環境**下的高性能、低延遲事件驅動交易系統骨幹（**L**ow **A**dded **T**rading **S**ystem）。本專案目標是在不依賴 C++20 特性的情況下，透過精湛的系統工程和現代 C++17 技巧，實現**納秒級別**的數據處理和策略信號生成。

@@ -18,7 +18,7 @@ add_executable(run_tests
 target_link_libraries(run_tests PRIVATE
     lats_core
     GTest::gtest
-    GTest::gtest_main
+    GTest::gtest_main # 提供 main 函數
     pthread
 )
 
